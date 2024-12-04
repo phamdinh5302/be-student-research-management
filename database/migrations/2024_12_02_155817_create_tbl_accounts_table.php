@@ -19,7 +19,7 @@ class CreateTblAccountsTable extends Migration
             $table->string('phone_number', 15);
             $table->string('address')->nullable();
             $table->string('profile_picture')->nullable();
-            $table->foreignId('role_id')->constrained('tbl_roles');
+            $table->foreignId('role_id')->constrained('tbl_roles')->onDelete('cascade');
             $table->string('password');
             $table->timestamps();
         });
@@ -30,4 +30,3 @@ class CreateTblAccountsTable extends Migration
         Schema::dropIfExists('tbl_accounts');
     }
 }
-
