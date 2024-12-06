@@ -7,10 +7,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens; // Đảm bảo thêm dòng này
+//use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class TblAccount extends Model
+class Account extends Authenticatable
 {
-    use HasFactory, HasApiTokens;  // Thêm HasApiTokens ở đây
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'tbl_accounts';
     protected $primaryKey = 'account_id';
@@ -27,10 +30,19 @@ class TblAccount extends Model
         'password'
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
 
     public function role()
     {
-        return $this->belongsTo(TblRole::class, 'role_id');
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+    // app/Models/TblAccount.php
+
+    public function getAuthPassword()
+    {
+        return $this->password;
     }
 }

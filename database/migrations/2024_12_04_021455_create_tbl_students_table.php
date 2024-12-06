@@ -13,14 +13,16 @@ return new class extends Migration
     //Bảng sinh viên (chứa thông tin về sinh viên).
     public function up()
     {
-        Schema::create('tbl_students', function (Blueprint $table) {
-            $table->id('student_id');
-            $table->foreignId('account_id')->constrained('tbl_accounts')->onDelete('cascade');
-            $table->string('student_name', 100);
-            $table->string('faculty', 50);
-            $table->string('class', 50);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_students')) {
+            Schema::create('tbl_students', function (Blueprint $table) {
+                $table->id('student_id');
+                $table->foreignId('account_id')->constrained('tbl_accounts')->onDelete('cascade');
+                $table->string('student_name', 100);
+                $table->string('faculty', 50);
+                $table->string('class', 50);
+                $table->timestamps();
+            });
+        }
     }
 
 

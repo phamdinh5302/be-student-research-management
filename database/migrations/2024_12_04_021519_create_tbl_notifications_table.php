@@ -13,14 +13,16 @@ return new class extends Migration
     //Bảng thông báo (lưu trữ các thông báo được gửi trong hệ thống).
     public function up()
     {
-        Schema::create('tbl_notifications', function (Blueprint $table) {
-            $table->id('notification_id');
-            $table->foreignId('sender_account_id')->constrained('tbl_accounts')->onDelete('cascade');
-            $table->string('title', 100);
-            $table->dateTime('sent_time');
-            $table->text('message');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_notifications')) {
+            Schema::create('tbl_notifications', function (Blueprint $table) {
+                $table->id('notification_id');
+                $table->foreignId('sender_account_id')->constrained('tbl_accounts', 'account_id')->onDelete('cascade');
+                $table->string('title');
+                $table->datetime('sent_time');
+                $table->text('message');
+                $table->timestamps();
+            });
+        }
     }
 
 

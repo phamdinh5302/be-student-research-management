@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 

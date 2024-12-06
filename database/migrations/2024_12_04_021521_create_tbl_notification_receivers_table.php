@@ -13,11 +13,13 @@ return new class extends Migration
     //Bảng người nhận thông báo (liên kết thông báo với các tài khoản người nhận).
     public function up()
     {
-        Schema::create('tbl_notification_receivers', function (Blueprint $table) {
-            $table->foreignId('notification_id')->constrained('tbl_notifications')->onDelete('cascade');
-            $table->foreignId('receiver_account_id')->constrained('tbl_accounts')->onDelete('cascade');
-            $table->primary(['notification_id', 'receiver_account_id']);
-        });
+        if (!Schema::hasTable('tbl_notification_receivers')) {
+            Schema::create('tbl_notification_receivers', function (Blueprint $table) {
+                $table->foreignId('notification_id')->constrained('tbl_notifications','notification_id')->onDelete('cascade');
+                $table->foreignId('receiver_account_id')->constrained('tbl_accounts', 'account_id')->onDelete('cascade');
+                $table->primary(['notification_id', 'receiver_account_id']);
+            });
+        }
     }
 
 

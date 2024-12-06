@@ -13,16 +13,18 @@ return new class extends Migration
     //Bảng tiến độ nghiên cứu (ghi nhận tiến độ thực hiện các đề tài).
     public function up()
     {
-        Schema::create('tbl_research_progress', function (Blueprint $table) {
-            $table->id('progress_id');
-            $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->text('task_description');
-            $table->text('report_content')->nullable();
-            $table->enum('status', ['Đúng tiến độ', 'Trễ tiến độ', 'Hoàn thành']);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_research_progress')) {
+            Schema::create('tbl_research_progress', function (Blueprint $table) {
+                $table->id('progress_id');
+                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
+                $table->date('start_date');
+                $table->date('end_date');
+                $table->text('task_description');
+                $table->text('report_content')->nullable();
+                $table->enum('status', ['Đúng tiến độ', 'Trễ tiến độ', 'Hoàn thành']);
+                $table->timestamps();
+            });
+        }
     }
 
 

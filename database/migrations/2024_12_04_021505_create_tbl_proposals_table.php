@@ -13,14 +13,16 @@ return new class extends Migration
     //Bảng đề cương nghiên cứu (chứa thông tin về đề cương và trạng thái phê duyệt).
     public function up()
     {
-        Schema::create('tbl_proposals', function (Blueprint $table) {
-            $table->id('proposal_id');
-            $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
-            $table->text('proposal_content');
-            $table->date('submission_date');
-            $table->enum('approval_status', ['Đang chờ duyệt', 'Đã phê duyệt', 'Bị từ chối']);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_proposals')) {
+            Schema::create('tbl_proposals', function (Blueprint $table) {
+                $table->id('proposal_id');
+                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
+                $table->text('proposal_content');
+                $table->date('submission_date');
+                $table->enum('approval_status', ['Đang chờ duyệt', 'Đã phê duyệt', 'Bị từ chối']);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

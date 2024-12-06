@@ -13,13 +13,15 @@ return new class extends Migration
     //Bảng sinh viên - đề tài (liên kết sinh viên tham gia vào các đề tài nghiên cứu).
     public function up()
     {
-        Schema::create('tbl_student_topics', function (Blueprint $table) {
-            $table->id('student_topic_id');
-            $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
-            $table->foreignId('student_id')->constrained('tbl_students')->onDelete('cascade');
-            $table->boolean('is_leader')->default(false);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_student_topics')) {
+            Schema::create('tbl_student_topics', function (Blueprint $table) {
+                $table->id('student_topic_id');
+                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
+                $table->foreignId('student_id')->constrained('tbl_students')->onDelete('cascade');
+                $table->boolean('is_leader')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
 

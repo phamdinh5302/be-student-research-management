@@ -13,13 +13,15 @@ return new class extends Migration
     //Bảng kết quả nghiên cứu (chứa kết quả và đánh giá của đề tài).
     public function up()
     {
-        Schema::create('tbl_research_results', function (Blueprint $table) {
-            $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade')->primary();
-            $table->text('result_description');
-            $table->float('score')->check('score >= 0 AND score <= 10');
-            $table->text('feedback')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_research_results')) {
+            Schema::create('tbl_research_results', function (Blueprint $table) {
+                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade')->primary();
+                $table->text('result_description');
+                $table->float('score')->check('score >= 0 AND score <= 10');
+                $table->text('feedback')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
 

@@ -13,16 +13,19 @@ return new class extends Migration
     //Bảng giảng viên (chứa thông tin về giảng viên)
     public function up()
     {
-        Schema::create('tbl_lecturers', function (Blueprint $table) {
-            $table->id('lecturer_id');  //mã giảng viên
-            $table->foreignId('account_id')->constrained('tbl_accounts')->onDelete('cascade'); //mã tài khoản
-            $table->string('lecturer_name', 100);   //tên
-            $table->string('faculty', 50); //khóa
-            $table->string('academic_degree', 50); //học vị
-            $table->integer('number_of_topics', 5); //sô đề tài hướng dẫn
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_lecturers')) {
+            Schema::create('tbl_lecturers', function (Blueprint $table) {
+                $table->id('lecturer_id');  //mã giảng viên
+                $table->foreignId('account_id')->constrained('tbl_accounts')->onDelete('cascade'); //mã tài khoản
+                $table->string('lecturer_name', 100);   //tên
+                $table->string('faculty', 50); //khóa
+                $table->string('academic_degree', 50); //học vị
+                $table->integer('number_of_topics')->default(1); //sô đề tài hướng dẫn
+                $table->timestamps();
+            });
+        }
     }
+
 
 
     /**

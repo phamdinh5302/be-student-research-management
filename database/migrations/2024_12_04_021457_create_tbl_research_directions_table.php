@@ -13,12 +13,14 @@ return new class extends Migration
     //Bảng hướng nghiên cứu (chứa các lĩnh vực nghiên cứu cụ thể).
     public function up()
     {
-        Schema::create('tbl_research_directions', function (Blueprint $table) {
-            $table->id('research_direction_id');
-            $table->string('research_direction_name', 100);
-            $table->text('description')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_research_directions')) {
+            Schema::create('tbl_research_directions', function (Blueprint $table) {
+                $table->id('research_direction_id');
+                $table->string('research_direction_name', 100);
+                $table->text('description')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
 

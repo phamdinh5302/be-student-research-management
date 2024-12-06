@@ -13,11 +13,13 @@ return new class extends Migration
     //Bảng giảng viên - hướng nghiên cứu (liên kết giảng viên với các hướng nghiên cứu họ phụ trách).
     public function up()
     {
-        Schema::create('tbl_lecturer_research_directions', function (Blueprint $table) {
-            $table->foreignId('lecturer_id')->constrained('tbl_lecturers')->onDelete('cascade');
-            $table->foreignId('research_direction_id')->constrained('tbl_research_directions')->onDelete('cascade');
-            $table->primary(['lecturer_id', 'research_direction_id']);
-        });
+        if (!Schema::hasTable('tbl_lecturer_research_directions')) {
+            Schema::create('tbl_lecturer_research_directions', function (Blueprint $table) {
+                $table->foreignId('lecturer_id')->constrained('tbl_lecturers')->onDelete('cascade');
+                $table->foreignId('research_direction_id')->constrained('tbl_research_directions')->onDelete('cascade');
+                $table->primary(['lecturer_id', 'research_direction_id']);
+            });
+        }
     }
 
 

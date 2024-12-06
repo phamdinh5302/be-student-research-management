@@ -13,14 +13,16 @@ return new class extends Migration
     //Bảng hội đồng đánh giá (chứa thông tin về các hội đồng đánh giá đề tài).
     public function up()
     {
-        Schema::create('tbl_evaluation_councils', function (Blueprint $table) {
-            $table->id('council_id');
-            $table->string('council_name', 100);
-            $table->string('council_level', 50);
-            $table->dateTime('time');
-            $table->string('location', 100);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_evaluation_councils')) {
+            Schema::create('tbl_evaluation_councils', function (Blueprint $table) {
+                $table->id('council_id');
+                $table->string('council_name', 100);
+                $table->string('council_level', 50);
+                $table->dateTime('time');
+                $table->string('location', 100);
+                $table->timestamps();
+            });
+        }
     }
 
 

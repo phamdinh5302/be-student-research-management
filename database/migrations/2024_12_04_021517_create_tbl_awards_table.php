@@ -13,12 +13,14 @@ return new class extends Migration
     //Bảng giải thưởng (ghi nhận giải thưởng cho các đề tài xuất sắc).
     public function up()
     {
-        Schema::create('tbl_awards', function (Blueprint $table) {
-            $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade')->primary();
-            $table->string('award_name', 100);
-            $table->text('award_description')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tbl_awards')) {
+            Schema::create('tbl_awards', function (Blueprint $table) {
+                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade')->primary();
+                $table->string('award_name', 100);
+                $table->text('award_description')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
 
