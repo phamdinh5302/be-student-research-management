@@ -9,11 +9,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+
 use App\Models\Role;
 use App\Models\Account;
 use App\Models\ResearchTopic;
 use App\Models\Lecturer;
 use App\Models\Student;
+use App\Models\EvaluationCouncil;
+use App\Models\Notification;
 
 class AuthController extends Controller
 {
@@ -117,12 +120,12 @@ class AuthController extends Controller
             $token = $user->createToken('API Token')->plainTextToken;
 
             // Trả về thông tin người dùng và token
-            return response()->json([
-                'message' => 'Login successful!',
-                'user' => $user,
-                'token' => $token
-            ], 200);
-            //return redirect()->route('home');
+            // return response()->json([
+            //     'message' => 'Login successful!',
+            //     'user' => $user,
+            //     'token' => $token
+            // ], 200);
+            return redirect()->route('home');
         }
 
         // Nếu xác thực thất bại, trả về thông báo lỗi
@@ -153,7 +156,7 @@ class AuthController extends Controller
             // Xóa session người dùng
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-
+            return redirect()->route('login');
             // Trả về phản hồi khi đăng xuất thành công
             return response()->json(['message' => 'Logged out successfully!'], 200);
         }
@@ -178,7 +181,8 @@ class AuthController extends Controller
         $totalTopics = ResearchTopic::count();
         $totalLecturers = Lecturer::count();
         $totalStudents = Student::count();
-
+        $totalCouncils = EvaluationCouncil::count();
+        return view('home', compact('totalTopics', 'totalLecturers', 'totalStudents', 'totalCouncils'));
         return response()->json([
             'user' => $user,
             'total_topics' => $totalTopics,
@@ -187,6 +191,20 @@ class AuthController extends Controller
         ], 200);
 
         // Truyền thông tin người dùng sang view 'home'
-        //return view('home', ['user' => $user]);
+    }
+    public function getNotifications()
+    {
+        // Lấy thông báo của người dùng
+        $notifications = Notification::with('sender')
+            ->whereIn('notification_id', function ($query) {
+                $query->select('notification_id')
+                    ->from('tbl_notification_receivers')
+                    ->where('account_id', auth()->id());
+            })
+            ->orderBy('sent_time', 'desc')
+            ->get();
+
+        // Trả về view với dữ liệu thông báo
+        return view('layouts.app', compact('notifications'));
     }
 }

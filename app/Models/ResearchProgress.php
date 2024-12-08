@@ -17,6 +17,8 @@ class ResearchProgress extends Model
         'end_date',
         'task_description',
         'report_content',
+        'report_url',
+        'report_link_name',
         'status'
     ];
 

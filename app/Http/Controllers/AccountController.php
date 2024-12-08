@@ -10,12 +10,27 @@ use Illuminate\Support\Facades\Storage; // Import Storage
 class AccountController extends Controller
 {
     // Hiển thị danh sách tài khoản
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = Account::with('role')->get(); // Lấy tài khoản cùng thông tin vai trò
+        $query = Account::query()->with('role');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'LIKE', "%{$search}%")
+                    ->orWhere('cccd', 'LIKE', "%{$search}%")
+                    ->orWhere('gender', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('phone_number', 'LIKE', "%{$search}%")
+                    ->orWhereHas('role', function ($q) use ($search) {
+                        $q->where('role_name', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+        $accounts = $query->paginate(10); // Lấy tài khoản cùng thông tin vai trò
         $roles = Role::all(); // Lấy danh sách vai trò
         return view('accounts.index', compact('accounts'));
-        return response()->json([$accounts, $roles, 200]); // Trả về JSON
+        return response()->json(['accounts' => $accounts, 'roles' => $roles, 200]); // Trả về JSON
     }
 
     // Hiển thị form tạo tài khoản mới
@@ -53,7 +68,7 @@ class AccountController extends Controller
 
             // Tạo tài khoản
             Account::create($validatedData);
-
+            return redirect()->route('accounts.index');
             return response()->json(['success' => 'Tao tai khoan thanh cong'], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -66,7 +81,7 @@ class AccountController extends Controller
         try {
             $account = Account::with('role')->findOrFail($id);
             return view('accounts.show', compact('account'));
-            return response()->json($account, 200); // Trả về JSON chi tiết tài khoản
+            return response()->json(['account' => $account, 200]); // Trả về JSON chi tiết tài khoản
         } catch (\Exception $e) {
             return response()->json(['error' => 'Account not found'], 404);
         }
@@ -117,7 +132,7 @@ class AccountController extends Controller
 
             // Cập nhật thông tin tài khoản
             $account->update($validatedData);
-
+            return redirect()->route('accounts.index');
             return response()->json(['success' => 'Cap nhat tai khoan thanh cong'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -138,6 +153,7 @@ class AccountController extends Controller
             // Xóa tài khoản
             $account->delete();
             //return redirect()->route('accounts.index')->with('success', 'Account deleted successfully');
+            return redirect()->route('accounts.index');
             return response()->json(['success' => 'Xoa tai khoan thanh cong'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Account not found'], 404);

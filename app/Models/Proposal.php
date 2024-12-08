@@ -12,7 +12,7 @@ class Proposal extends Model
     protected $primaryKey = 'proposal_id';
 
     protected $fillable = [
-        'topic_id', 'proposal_content', 'submission_date', 'approval_status'
+        'topic_id', 'proposal_content','proposal_file', 'submission_date', 'approval_status'
     ];
 
     public function topic()

@@ -1,35 +1,61 @@
-<!-- resources/views/home.blade.php -->
+@extends('layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Welcome, {{ Auth::user()->username }}</h1>
-
-            <!-- Nút đăng xuất -->
-            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                @csrf
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
-        </div>
-
-        <!-- Nút đăng ký (chỉ hiển thị nếu người dùng có role_id = 1) -->
-        @if (Auth::user()->role_id == 1)
-            <a href="{{ route('register') }}" class="btn btn-primary">Go to Register</a>
-        @endif
+@section('content')
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary">Chào mừng bạn đến với Hệ thống Quản lý Nghiên cứu Khoa học</h2>
+        <p class="text-muted">Quản lý nghiên cứu khoa học một cách dễ dàng và hiệu quả</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Đề tài</h5>
+                    <p class="card-text display-6">{{$totalTopics}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Giảng viên hướng dẫn</h5>
+                    <p class="card-text display-6">{{$totalLecturers}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-warning">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Hội đồng đánh giá</h5>
+                    <p class="card-text display-6">{{$totalCouncils}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Tiến độ được duyệt</h5>
+                    <p class="card-text display-6">12</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-danger">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-danger">Đề cương đã duyệt</h5>
+                    <p class="card-text display-6">8</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-dark">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-dark">Sinh viên tham gia</h5>
+                    <p class="card-text display-6">{{$totalStudents}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

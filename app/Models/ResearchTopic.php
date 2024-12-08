@@ -29,7 +29,8 @@ class ResearchTopic extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'tbl_student_topics');
+        return $this->belongsToMany(Student::class, 'tbl_student_topics','topic_id', 'student_id')
+        ->withPivot('is_leader');
     }
 
     public function proposals()

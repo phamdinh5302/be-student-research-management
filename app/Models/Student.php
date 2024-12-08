@@ -22,7 +22,7 @@ class Student extends Model
 
     public function researchTopics()
     {
-        return $this->belongsToMany(ResearchTopic::class, 'tbl_student_topics');
+        return $this->belongsToMany(ResearchTopic::class, 'tbl_student_topics', 'student_id', 'topic_id');
     }
 }
 

@@ -10,9 +10,13 @@ class Lecturer extends Model
     use HasFactory;
     protected $table = 'tbl_lecturers';
     protected $primaryKey = 'lecturer_id';
-    
+
     protected $fillable = [
-        'account_id', 'lecturer_name', 'faculty', 'academic_degree', 'number_of_topics'
+        'account_id',
+        'lecturer_name',
+        'faculty',
+        'academic_degree',
+        'number_of_topics'
     ];
 
     public function account()
@@ -22,8 +26,9 @@ class Lecturer extends Model
 
     public function researchDirections()
     {
-        return $this->belongsToMany(ResearchDirection::class, 'tbl_lecturer_research_directions');
+        return $this->belongsToMany(ResearchDirection::class, 'tbl_lecturer_research_directions', 'lecturer_id', 'research_direction_id');
     }
+
 
     public function researchTopics()
     {
