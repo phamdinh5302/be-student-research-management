@@ -20,7 +20,7 @@
                     <td>{{ $student->student_name }}</td>
                     <td>{{ $student->faculty }}</td>
                     <td>{{ $student->class }}</td>
-                    <td>
+                    <td class="action-column">
                         <a href="{{ route('students.show', $student->student_id) }}" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i>
                         </a>

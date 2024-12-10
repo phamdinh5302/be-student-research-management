@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Quản lý nghiên cứu khoa học của sinh viên')</title>
     <!-- Thêm Bootstrap CSS -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 
     <style>
@@ -129,6 +131,21 @@
             color: #000;
             /* Đảm bảo màu chữ sáng */
         }
+
+        .action-column {
+            white-space: nowrap;
+        }
+
+        .action-column .btn {
+            margin-right: 5px;
+        }
+
+        #status-alert {
+            z-index: 9999;
+            min-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
@@ -197,8 +214,8 @@
     @else
         <div class="sidebar">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Trang chủ</a>
-            <a href="{{ route('research_registration.index') }}"
-                class="{{ request()->routeIs('research_registration.index') ? 'active' : '' }}">
+            <a href="{{ route('research_topics.index') }}"
+                class="{{ request()->routeIs('research_topics.index') ? 'active' : '' }}">
                 Đăng ký đề tài
             </a>
             <a href="{{ route('research_progress.index') }}"

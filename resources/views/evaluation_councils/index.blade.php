@@ -6,7 +6,7 @@
 
         <a href="{{ route('evaluation_councils.create') }}" class="btn btn-primary mb-3">Tạo Hội đồng mới</a>
 
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>Tên hội đồng</th>

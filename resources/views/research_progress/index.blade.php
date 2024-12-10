@@ -10,7 +10,7 @@
             </a>
         </div>
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -38,7 +38,7 @@
 
                         </td>
                         <td>{{ $progress->status }}</td>
-                        <td>
+                        <td class="action-column">
                             <a href="{{ route('research_progress.show', $progress->progress_id) }}"
                                 class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                             <a href="{{ route('research_progress.edit', $progress->progress_id) }}"

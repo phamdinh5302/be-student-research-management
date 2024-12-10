@@ -16,6 +16,7 @@ class ResearchTopic extends Model
         'topic_name',
         'research_goal',
         'content',
+        'research_direction_id',
         'lecturer_id',
         'start_date',
         'end_date',
@@ -25,6 +26,11 @@ class ResearchTopic extends Model
     public function lecturer()
     {
         return $this->belongsTo(Lecturer::class, 'lecturer_id');
+    }
+    // Định nghĩa quan hệ với ResearchDirection
+    public function researchDirections()
+    {
+        return $this->belongsTo(ResearchDirection::class, 'research_direction_id');
     }
 
     public function students()

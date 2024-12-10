@@ -6,6 +6,15 @@
     <form action="{{ route('research_topics.store') }}" method="POST">
         @csrf
         <div class="mb-3">
+            <label for="research_direction_id" class="form-label">Hướng nghiên cứu</label>
+            <select name="research_direction_id" id="research_direction_id" class="form-select">
+                <option value="">Chọn hướng nghiên cứu</option>
+                @foreach ($researchDirections as $direction)
+                    <option value="{{ $direction->research_direction_id }}">{{ $direction->research_direction_name }}</option>
+                @endforeach
+            </select>
+        </div>        
+        <div class="mb-3">
             <label for="topic_name" class="form-label">Tên đề tài</label>
             <input type="text" name="topic_name" id="topic_name" class="form-control" required>
         </div>

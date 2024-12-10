@@ -17,6 +17,13 @@ class ResearchDirection extends Model
 
     public function lecturers()
     {
-        return $this->belongsToMany(Lecturer::class, 'tbl_lecturer_research_directions');
+        return $this->belongsToMany(Lecturer::class, 'tbl_lecturer_research_directions', 'lecturer_id', 'research_direction_id');
+    }
+    /**
+     * Quan hệ với đề tài nghiên cứu.
+     */
+    public function topics()
+    {
+        return $this->hasMany(ResearchTopic::class, 'research_direction_id');
     }
 }

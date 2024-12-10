@@ -8,6 +8,11 @@
         <p>{{ $topic->topic_name }}</p>
     </div>
     <div class="mb-3">
+        <strong>Hướng nghiên cứu</strong>
+        <p>{{ $topic->researchDirections->research_direction_name }}</p>
+    </div>
+    
+    <div class="mb-3">
         <strong>Mục tiêu:</strong>
         <p>{{ $topic->research_goal }}</p>
     </div>

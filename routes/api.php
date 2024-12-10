@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\LecturerController;
+use App\Http\Controllers\ResearchTopicRegistrationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,3 +57,5 @@ Route::middleware('auth:api')->prefix('lecturers')->group(function () {
     Route::put('/{id}', [LecturerController::class, 'update']); // Cập nhật giảng viên
     Route::delete('/{id}', [LecturerController::class, 'destroy']); // Xóa giảng viên
 });
+
+Route::get('get-topics-and-lecturers', [ResearchTopicRegistrationController::class, 'getTopicsAndLecturers']);

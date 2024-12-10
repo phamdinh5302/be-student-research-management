@@ -6,7 +6,7 @@
         <div class="mb-3 text-end">
             <a href="{{ route('proposals.create') }}" class="btn btn-primary">Thêm mới đề cương</a>
         </div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -23,7 +23,7 @@
                         <td>{{ $proposal->topic->topic_name }}</td>
                         <td>{{ $proposal->submission_date }}</td>
                         <td>{{ $proposal->approval_status }}</td>
-                        <td>
+                        <td class="action-column">
                             <a href="{{ route('proposals.show', $proposal->proposal_id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
                             <a href="{{ route('proposals.edit', $proposal->proposal_id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                             <form action="{{ route('proposals.destroy', $proposal->proposal_id) }}" method="POST" class="d-inline">

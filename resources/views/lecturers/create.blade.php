@@ -30,7 +30,7 @@
             <label for="number_of_topics">Số lượng đề tài:</label>
             <input type="number" name="number_of_topics" id="number_of_topics" class="form-control" min="0">
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="research_directions">Hướng nghiên cứu:</label>
             <select name="research_directions[]" id="research_directions" class="form-control" multiple>
                 @foreach ($researchDirections as $direction)
@@ -43,4 +43,17 @@
         <button type="submit" class="btn btn-primary">Thêm</button>
         <a href="{{ route('lecturers.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Apply Select2 to the students select input
+            $('#research_directions').select2({
+                placeholder: 'Chọn hướng nghiên cứu',
+                allowClear: true,
+                //maximumSelectionLength: 3, // Allow up to 3 members
+                width: '100%' // Make it span the full width
+            });
+        });
+    </script>
 @endsection

@@ -118,12 +118,13 @@ class AuthController extends Controller
 
             // Tạo token cho người dùng
             $token = $user->createToken('API Token')->plainTextToken;
-
+            $student = $user->student;
             // Trả về thông tin người dùng và token
             // return response()->json([
             //     'message' => 'Login successful!',
             //     'user' => $user,
-            //     'token' => $token
+            //     'token' => $token,
+            //     'student' =>$student
             // ], 200);
             return redirect()->route('home');
         }

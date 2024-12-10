@@ -50,7 +50,7 @@
                         <td>{{ $account->email }}</td>
                         <td>{{ $account->phone_number }}</td>
                         <td>{{ $account->role->role_name }}</td>
-                        <td>
+                        <td class="action-column">
                             <a href="{{ route('accounts.show', $account->account_id) }}" class="btn btn-info btn-sm">
                                 <i class="fas fa-eye"></i>
                             </a>

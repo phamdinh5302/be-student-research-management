@@ -66,12 +66,19 @@ Route::resource('evaluation_councils', EvaluationCouncilController::class);
 Route::resource('proposals', ProposalController::class);
 //quan ly tien do
 Route::resource('research_progress', ResearchProgressController::class);
+//quan ly dang ky de tai
+Route::resource('research_registration', ResearchTopicRegistrationController::class);
 
 
-Route::get('research-registration', [ResearchTopicRegistrationController::class, 'index'])->name('research_registration.index');
-Route::post('research-registration', [ResearchTopicRegistrationController::class, 'store'])->name('research_registration.store');
+// Route::get('research-registration', [ResearchTopicRegistrationController::class, 'index'])->name('research_registration.index');
+// Route::post('research-registration', [ResearchTopicRegistrationController::class, 'store'])->name('research_registration.store');
+Route::get('/get-topics-and-lecturers/{id}', [ResearchTopicRegistrationController::class, 'getTopicsAndLecturers']);
+Route::post('/research_topics/{id}/update-status', [ResearchTopicController::class, 'updateStatus'])->name('research_topics.update_status');
+
 // Hiển thị thông báo cho người dùng
 Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.index');
 
 // Đánh dấu thông báo đã đọc (tùy chọn, nếu bạn muốn đánh dấu thông báo đã đọc khi người dùng xem)
 Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+

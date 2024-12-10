@@ -39,7 +39,8 @@ class EvaluationCouncilController extends Controller
             'time' => 'required|date',
             'location' => 'required|string|max:255',
             'lecturer_ids' => 'required|array',
-            'lecturer_ids.*' => 'exists:tbl_lecturers,lecturer_id',
+            'lecturer_ids.*.id' => 'exists:tbl_lecturers,lecturer_id',
+            'lecturer_ids.*.duty' => 'required|in:Chủ tịch hội đồng,Ủy viên,Thư ký',
             'topic_ids' => 'required|array',
             'topic_ids.*' => 'exists:tbl_research_topics,topic_id',
         ]);
@@ -47,9 +48,9 @@ class EvaluationCouncilController extends Controller
         // Tạo hội đồng mới
         $council = EvaluationCouncil::create($request->only('council_name', 'council_level', 'time', 'location'));
 
-        // Gán giảng viên cho hội đồng
-        foreach ($request->lecturer_ids as $lecturer_id) {
-            $council->lecturers()->attach($lecturer_id);
+        // Gán giảng viên và chức vụ cho hội đồng
+        foreach ($request->lecturer_ids as $lecturer) {
+            $council->lecturers()->attach($lecturer['id'], ['duty' => $lecturer['duty']]);
         }
 
         // Gán đề tài cho hội đồng
@@ -63,10 +64,18 @@ class EvaluationCouncilController extends Controller
     // Hiển thị form chỉnh sửa hội đồng
     public function edit($id)
     {
-        $council = EvaluationCouncil::findOrFail($id);
+        $council = EvaluationCouncil::with('lecturers')->findOrFail($id);
         $lecturers = Lecturer::all();
         $topics = ResearchTopic::all();
-        return view('evaluation_councils.edit', compact('council', 'lecturers', 'topics'));
+        $lecturerDuties = $council->lecturers->map(function ($lecturer) {
+            return [
+                'id' => $lecturer->lecturer_id,
+                'name' => $lecturer->lecturer_name,
+                'duty' => $lecturer->pivot->duty,
+            ];
+        });
+
+        return view('evaluation_councils.edit', compact('council', 'lecturers', 'topics', 'lecturerDuties'));
     }
 
     // Cập nhật hội đồng

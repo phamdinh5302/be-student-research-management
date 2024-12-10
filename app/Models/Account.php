@@ -45,4 +45,12 @@ class Account extends Authenticatable
     {
         return $this->password;
     }
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'account_id', 'account_id');
+    }
+    public function lecturer()
+    {
+        return $this->hasOne(Lecturer::class, 'account_id', 'account_id');
+    }
 }

@@ -58,4 +58,17 @@
             <a href="{{ route('lecturers.index') }}" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Apply Select2 to the students select input
+            $('#research_directions').select2({
+                placeholder: 'Chọn hướng nghiên cứu',
+                allowClear: true,
+                //maximumSelectionLength: 3, // Allow up to 3 members
+                width: '100%' // Make it span the full width
+            });
+        });
+    </script>
 @endsection

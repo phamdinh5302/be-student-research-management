@@ -16,8 +16,14 @@ return new class extends Migration
         if (!Schema::hasTable('tbl_student_topics')) {
             Schema::create('tbl_student_topics', function (Blueprint $table) {
                 $table->id('student_topic_id');
-                $table->foreignId('topic_id')->constrained('tbl_research_topics')->onDelete('cascade');
-                $table->foreignId('student_id')->constrained('tbl_students')->onDelete('cascade');
+                $table->foreignId('topic_id')
+                    ->constrained('tbl_research_topics')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade'); // Đảm bảo cập nhật liên kết
+                $table->foreignId('student_id')
+                    ->constrained('tbl_students')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
                 $table->boolean('is_leader')->default(false);
                 $table->timestamps();
             });
