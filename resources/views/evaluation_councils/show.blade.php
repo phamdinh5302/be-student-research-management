@@ -24,15 +24,23 @@
             <p>{{ $council->location }}</p>
         </div>
 
+        <!-- Hiển thị giảng viên theo vai trò -->
         <div class="mb-3">
-            <strong>Giảng viên tham gia:</strong>
-            <ul>
-                @foreach ($council->lecturers as $lecturer)
-                    <li>{{ $lecturer->lecturer_name }} - {{ $lecturer->duty }}</li>
-                @endforeach
-            </ul>
+            <strong>Chủ tịch hội đồng:</strong>
+            <p>{{ $roles['chairman'] ? $roles['chairman']->lecturer_name : 'Chưa chọn' }}</p>
         </div>
 
+        <div class="mb-3">
+            <strong>Ủy viên:</strong>
+            <p>{{ $roles['member'] ? $roles['member']->lecturer_name : 'Chưa chọn' }}</p>
+        </div>
+
+        <div class="mb-3">
+            <strong>Thư ký:</strong>
+            <p>{{ $roles['secretary'] ? $roles['secretary']->lecturer_name : 'Chưa chọn' }}</p>
+        </div>
+
+        <!-- Hiển thị danh sách đề tài -->
         <div class="mb-3">
             <strong>Đề tài:</strong>
             <ul>

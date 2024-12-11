@@ -22,7 +22,7 @@
         }
 
         .sidebar {
-            width: 250px;
+            min-width: 250px;
             position: fixed;
             top: 66px;
             /* Chiều cao navbar */
@@ -146,6 +146,18 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        h4 {
+            background-color: #555c77;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            /* width: 100%; */
+        }
+
+        .bg-danger {
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -166,10 +178,42 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <!-- Notification icon with badge -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="notificationIcon" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi bi-bell-fill notification-icon position-relative">
+                                <!-- Display unread notifications count if any -->
+                                @if (Auth::user()->receivedNotifications->where('status', 'not_read')->count() > 0)
+                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                        {{ Auth::user()->receivedNotifications->where('status', 'not_read')->count() }}
+                                    </span>
+                                @endif
+                            </i>
+                        </a>
+                        <!-- Dropdown for notifications -->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationIcon">
+                            <li class="dropdown-header">Thông báo</li>
+                            @forelse(Auth::user()->receivedNotifications->where('status', 'not_read') as $notification)
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('notifications.show', $notification->notification_id) }}">{{ $notification->message }}</a>
+                                </li>
+                            @empty
+                                <li><a class="dropdown-item text-muted" href="#">Không có thông báo mới</a></li>
+                            @endforelse
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('notifications.index') }}">Xem tất cả thông
+                                    báo</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- User dropdown for account settings and logout -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell-fill notification-icon"></i> <!-- Icon thông báo -->
                             {{ Auth::user()->username }} <!-- Hiển thị tên người dùng -->
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -190,44 +234,69 @@
     <!-- Sidebar bên trái -->
     @if (auth()->check() && auth()->user()->role_id == 1)
         <div class="sidebar">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Trang chủ</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                <i class="fas fa-home"></i> Trang chủ
+            </a>
             <a href="{{ route('accounts.index') }}"
-                class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}">Quản lý tài khoản</a>
-            <a href="{{ route('research_topics.index') }}"
-                class="{{ request()->routeIs('research_topics.index') ? 'active' : '' }}">Quản lý đề tài</a>
-            <a href="{{ route('research_progress.index') }}"
-                class="{{ request()->routeIs('research_progress.index') ? 'active' : '' }}">Quản lý Tiến
-                độ nghiên cứu</a>
-            <a href="{{ route('evaluation_councils.index') }}"
-                class="{{ request()->routeIs('evaluation_councils.index') ? 'active' : '' }}">Quản lý Hội đồng đánh
-                giá</a>
+                class="{{ request()->routeIs('accounts.index') ? 'active' : '' }}">
+                <i class="fas fa-user-cog"></i> Quản lý tài khoản
+            </a>
             <a href="{{ route('students.index') }}"
-                class="{{ request()->routeIs('students.index') ? 'active' : '' }}">Quản lý Sinh viên</a>
+                class="{{ request()->routeIs('students.index') ? 'active' : '' }}">
+                <i class="fas fa-user-graduate"></i> Quản lý Sinh viên
+            </a>
             <a href="{{ route('lecturers.index') }}"
-                class="{{ request()->routeIs('lecturers.index') ? 'active' : '' }}">Quản lý Giảng viên</a>
+                class="{{ request()->routeIs('lecturers.index') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard-teacher"></i> Quản lý Giảng viên
+            </a>
+            <a href="{{ route('research_topics.index') }}"
+                class="{{ request()->routeIs('research_topics.index') ? 'active' : '' }}">
+                <i class="fas fa-book"></i> Quản lý đề tài
+            </a>
             <a href="{{ route('proposals.index') }}"
-                class="{{ request()->routeIs('proposals.index') ? 'active' : '' }}">Quản lý Đề
-                cương</a>
-            <a href="" class="{{ request()->routeIs('research.results.index') ? 'active' : '' }}">Quản lý Kết
-                quả nghiên cứu</a>
+                class="{{ request()->routeIs('proposals.index') ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Quản lý Đề cương
+            </a>
+            <a href="{{ route('research_progress.index') }}"
+                class="{{ request()->routeIs('research_progress.index') ? 'active' : '' }}">
+                <i class="fas fa-tasks"></i> Quản lý Tiến độ nghiên cứu
+            </a>
+            <a href="{{ route('evaluation_councils.index') }}"
+                class="{{ request()->routeIs('evaluation_councils.index') ? 'active' : '' }}">
+                <i class="fas fa-users"></i> Quản lý Hội đồng đánh giá
+            </a>
+            <a href="{{ route('research_results.index') }}"
+                class="{{ request()->routeIs('research_results.index') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i> Quản lý Kết quả nghiên cứu
+            </a>
         </div>
     @else
         <div class="sidebar">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Trang chủ</a>
             <a href="{{ route('research_topics.index') }}"
                 class="{{ request()->routeIs('research_topics.index') ? 'active' : '' }}">
-                Đăng ký đề tài
+                <i class="fas fa-book"></i> Đăng ký đề tài
+            </a>
+            <a href="{{ route('proposals.index') }}"
+                class="{{ request()->routeIs('proposals.index') ? 'active' : '' }}">
+                <i class="fas fa-file-alt"></i> Nộp Đề cương
             </a>
             <a href="{{ route('research_progress.index') }}"
-                class="{{ request()->routeIs('research_progress.index') ? 'active' : '' }}">Quản lý Tiến
-                độ nghiên cứu</a>
+                class="{{ request()->routeIs('research_progress.index') ? 'active' : '' }}">
+                <i class="fas fa-tasks"></i> Quản lý Tiến độ nghiên cứu
+            </a>
+            <a href="{{ route('research_results.index') }}"
+                class="{{ request()->routeIs('research_results.index') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i> Kết quả nghiên cứu
+            </a>
         </div>
     @endif
 
-
-
     <!-- Nội dung động của trang -->
     <div class="content">
+        <div id="status-alert" class="alert d-none position-fixed top-0 end-0 m-3" style="z-index: 1050;"
+            role="alert">
+        </div>
         @yield('content')
     </div>
 

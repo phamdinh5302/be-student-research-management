@@ -16,10 +16,12 @@ use App\Models\ResearchTopic;
 use App\Models\Lecturer;
 use App\Models\Student;
 use App\Models\EvaluationCouncil;
+use App\Models\Proposal;
 use App\Models\Notification;
 
 class AuthController extends Controller
 {
+    
     // Hiển thị form đăng ký nếu người dùng có role_id = 1
     public function showRegisterForm(Request $request)
     {
@@ -166,7 +168,6 @@ class AuthController extends Controller
         return response()->json(['message' => 'No user to log out.'], 400);
     }
 
-
     // Trang home sau khi đăng nhập
 
     public function home()
@@ -183,7 +184,9 @@ class AuthController extends Controller
         $totalLecturers = Lecturer::count();
         $totalStudents = Student::count();
         $totalCouncils = EvaluationCouncil::count();
-        return view('home', compact('totalTopics', 'totalLecturers', 'totalStudents', 'totalCouncils'));
+        $totalProposal = Proposal::count();
+        $unreadNotifications = auth()->user()->notifications->where('status', 'not_read')->count();
+        return view('home', compact('totalTopics', 'totalLecturers', 'totalStudents', 'totalCouncils', 'totalProposal','unreadNotifications'));
         return response()->json([
             'user' => $user,
             'total_topics' => $totalTopics,
@@ -204,8 +207,8 @@ class AuthController extends Controller
             })
             ->orderBy('sent_time', 'desc')
             ->get();
-
+        $unreadNotifications = auth()->user()->notifications->where('status', 'unread')->count();
         // Trả về view với dữ liệu thông báo
-        return view('layouts.app', compact('notifications'));
+        return view('layouts.app', compact('notifications','unreadNotifications'));
     }
 }

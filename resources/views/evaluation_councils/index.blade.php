@@ -3,9 +3,11 @@
 @section('content')
     <div class="container">
         <h1 class="text-center mb-4">Danh sách Hội đồng</h1>
-
-        <a href="{{ route('evaluation_councils.create') }}" class="btn btn-primary mb-3">Tạo Hội đồng mới</a>
-
+        <div class=" mb-3 text-end">
+            <a href="{{ route('evaluation_councils.create') }}" class="btn btn-primary mb-3">
+                <i class="fas fa-plus"></i> Tạo Hội đồng mới
+            </a>
+        </div>
         <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
@@ -23,11 +25,22 @@
                     <tr>
                         <td>{{ $council->council_name }}</td>
                         <td>{{ $council->council_level }}</td>
-                        <td>{{ $council->time }}</td>
-                        <td>{{ $council->location }}</td>
-                        <td>
-                            @foreach ($council->lecturers as $lecturer)
-                                {{ $lecturer->lecturer_name }}<br>
+                        <td>{{ \Carbon\Carbon::parse($council->time)->format('H:i d/m/Y') }}</td>
+                        <td class="action-column">{{ $council->location }}</td>
+                        <td class="action-column">
+                            @php
+                                // Sắp xếp giảng viên theo vai trò
+                                $lecturers = $council->lecturers->sortBy(function ($lecturer) {
+                                    return $lecturer->pivot->duty == 'Chủ tịch hội đồng'
+                                        ? 1
+                                        : ($lecturer->pivot->duty == 'Ủy viên'
+                                            ? 2
+                                            : 3);
+                                });
+                            @endphp
+
+                            @foreach ($lecturers as $lecturer)
+                                <strong>{{ $lecturer->pivot->duty }}</strong>: {{ $lecturer->lecturer_name }} <br>
                             @endforeach
                         </td>
                         <td>
@@ -35,7 +48,7 @@
                                 {{ $topic->topic_name }}<br>
                             @endforeach
                         </td>
-                        <td>
+                        <td class="action-column">
                             <a href="{{ route('evaluation_councils.show', $council->council_id) }}" class="btn btn-info">
                                 <i class="fas fa-eye"></i>
                             </a>
@@ -46,7 +59,8 @@
                                 style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa hội đồng này?')">
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa hội đồng này?')">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>

@@ -10,7 +10,7 @@
 
             <div class="mb-3">
                 <label for="topic_id" class="form-label">Chọn đề tài</label>
-                <select class="form-select" id="topic_id" name="topic_id" required disabled>
+                <select class="form-select" id="topic_id" name="topic_id" required>
                     <option value="">Chọn đề tài</option>
                     @foreach ($topics as $topic)
                         <option value="{{ $topic->topic_id }}"

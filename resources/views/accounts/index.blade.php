@@ -4,7 +4,7 @@
     <div class="container">
         <h1>Danh Sách Tài Khoản</h1>
         <!-- Nút Thêm mới, Tải lại và Xuất Excel -->
-        <div class="d-flex mb-3">
+        <div class="mb-3 text-end">
             <a href="{{ route('accounts.create') }}" class="btn btn-primary me-2">
                 <i class="fas fa-plus"></i> Thêm mới
             </a>

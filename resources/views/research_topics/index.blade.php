@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div id="status-alert" class="alert d-none position-fixed top-0 end-0 m-3" style="z-index: 1050;" role="alert">
-    </div>
+    
     <div class="container">
 
         <h1 class="text-center mb-4">Danh sách Đề tài Nghiên cứu</h1>

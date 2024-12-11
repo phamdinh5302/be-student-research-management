@@ -26,14 +26,14 @@ class LecturerController extends Controller
     }
     public function create()
     {
-        $accounts = Account::all();
+        $accounts = Account::where('role_id',3)->get();
         $researchDirections = ResearchDirection::all();
         return view('lecturers.create', compact('accounts', 'researchDirections'));
     }
     public function edit($id)
     {
         $lecturer = Lecturer::with('researchDirections')->findOrFail($id);
-        $accounts = Account::all();
+        $accounts = Account::where('role_id',3)->get();
         $researchDirections = ResearchDirection::all();
         return view('lecturers.edit', compact('lecturer', 'accounts', 'researchDirections'));
     }

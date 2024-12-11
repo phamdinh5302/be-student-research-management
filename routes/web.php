@@ -10,6 +10,7 @@ use App\Http\Controllers\EvaluationCouncilController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ResearchProgressController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ResearchResultController;
 
 use App\Http\Controllers\ResearchTopicRegistrationController;
 
@@ -66,6 +67,9 @@ Route::resource('evaluation_councils', EvaluationCouncilController::class);
 Route::resource('proposals', ProposalController::class);
 //quan ly tien do
 Route::resource('research_progress', ResearchProgressController::class);
+//quan ly diem
+Route::resource('research_results', ResearchResultController::class);
+
 //quan ly dang ky de tai
 Route::resource('research_registration', ResearchTopicRegistrationController::class);
 
@@ -73,12 +77,20 @@ Route::resource('research_registration', ResearchTopicRegistrationController::cl
 // Route::get('research-registration', [ResearchTopicRegistrationController::class, 'index'])->name('research_registration.index');
 // Route::post('research-registration', [ResearchTopicRegistrationController::class, 'store'])->name('research_registration.store');
 Route::get('/get-topics-and-lecturers/{id}', [ResearchTopicRegistrationController::class, 'getTopicsAndLecturers']);
+//cap nhat trang thai cho de tai
 Route::post('/research_topics/{id}/update-status', [ResearchTopicController::class, 'updateStatus'])->name('research_topics.update_status');
-
+//cap nhat trang thai cho de cuong
+Route::post('/proposals/{id}/update-status', [ProposalController::class, 'updateStatus']);
+//cap nhat trang thai cho tien do de tai
+Route::post('/research_progress/{id}/update-status', [ResearchProgressController::class, 'updateStatus']);
 // Hiển thị thông báo cho người dùng
 Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.index');
 
 // Đánh dấu thông báo đã đọc (tùy chọn, nếu bạn muốn đánh dấu thông báo đã đọc khi người dùng xem)
 Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
-
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'getUserNotifications'])->name('notifications.index');
+});
+Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+Route::post('/notifications/{id}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');

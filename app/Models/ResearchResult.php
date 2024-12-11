@@ -12,6 +12,7 @@ class ResearchResult extends Model
     protected $primaryKey = 'topic_id';
 
     protected $fillable = [
+        'topic_id',
         'result_description',
         'score',
         'feedback'

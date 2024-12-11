@@ -53,4 +53,15 @@ class Account extends Authenticatable
     {
         return $this->hasOne(Lecturer::class, 'account_id', 'account_id');
     }
+    // Mối quan hệ nhiều với Notification (người gửi)
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'sender_account_id');
+    }
+
+    // Mối quan hệ nhiều-nhiều với NotificationReceiver (người nhận)
+    public function receivedNotifications()
+    {
+        return $this->belongsToMany(Notification::class, 'tbl_notification_receivers', 'receiver_account_id', 'notification_id');
+    }
 }

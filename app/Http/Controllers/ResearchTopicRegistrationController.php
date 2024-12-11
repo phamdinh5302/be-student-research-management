@@ -15,7 +15,8 @@ class ResearchTopicRegistrationController extends Controller
     {
         $researchDirections = ResearchDirection::with(['topics', 'lecturers'])->get();
         // Lấy tất cả sinh viên chưa đăng ký đề tài
-        $students = Student::whereDoesntHave('researchTopics')->get();
+        //$students = Student::whereDoesntHave('researchTopics')->get();
+        $students = Student::all();
 
         return view('research_registration.index', compact('researchDirections', 'students'));
     }
@@ -109,7 +110,8 @@ class ResearchTopicRegistrationController extends Controller
                 'is_leader' => $student_id == $leader->student_id ? 1 : 0,
             ]);
         }
-
+        // Gửi thông báo đến Admin
+        app(NotificationController::class)->sendTopicRegistrationNotification($topic->topic_id);
         return redirect()->route('research_topics.index')->with('success', 'Đăng ký đề tài thành công!');
     }
 
@@ -149,8 +151,8 @@ class ResearchTopicRegistrationController extends Controller
                 'is_leader' => $student_id == $leader->student_id ? 1 : 0,
             ]);
         }
-
+        // Gửi thông báo đến Admin
+        app(NotificationController::class)->sendTopicRegistrationNotification($topic->topic_id);
         return redirect()->route('research_topics.index')->with('success', 'Đã cập nhật đề tài thành công!');
     }
-
 }

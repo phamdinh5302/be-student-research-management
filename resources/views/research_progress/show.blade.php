@@ -34,6 +34,10 @@
             @endif
         </div>
         <div class="mb-3">
+            <strong>Nhận xét: </strong>
+            <p>{{ $progress->note }}</p>
+        </div >
+        <div class="mb-3">
             <strong>Trạng thái: </strong>{{ $progress->status }}
         </div>
 

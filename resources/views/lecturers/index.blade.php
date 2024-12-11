@@ -3,7 +3,11 @@
 @section('content')
     <div class="container">
         <h1 class="my-4">Danh sách giảng viên</h1>
-        <a href="{{ route('lecturers.create') }}" class="btn btn-primary mb-3">Thêm mới giảng viên</a>
+        <div class="mb-3 text-end">
+            <a href="{{ route('lecturers.create') }}" class="btn btn-primary mb-3">
+                <i class="fas fa-plus"></i> Thêm mới giảng viên
+            </a>
+        </div>
         <table class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>

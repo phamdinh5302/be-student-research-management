@@ -25,9 +25,18 @@ class EvaluationCouncilController extends Controller
     }
     public function show($id)
     {
-        $council = EvaluationCouncil::findOrFail($id);
-        return view('evaluation_councils.show', compact('council'));
+        $council = EvaluationCouncil::with(['lecturers', 'topics'])->findOrFail($id);
+
+        // Tách giảng viên theo vai trò
+        $roles = [
+            'chairman' => $council->lecturers->where('pivot.duty', 'Chủ tịch hội đồng')->first(),
+            'member' => $council->lecturers->where('pivot.duty', 'Ủy viên')->first(),
+            'secretary' => $council->lecturers->where('pivot.duty', 'Thư ký')->first(),
+        ];
+
+        return view('evaluation_councils.show', compact('council', 'roles'));
     }
+
 
 
     // Lưu hội đồng mới
@@ -38,9 +47,9 @@ class EvaluationCouncilController extends Controller
             'council_level' => 'required|string|max:255',
             'time' => 'required|date',
             'location' => 'required|string|max:255',
-            'lecturer_ids' => 'required|array',
-            'lecturer_ids.*.id' => 'exists:tbl_lecturers,lecturer_id',
-            'lecturer_ids.*.duty' => 'required|in:Chủ tịch hội đồng,Ủy viên,Thư ký',
+            'lecturer_roles.chairman' => 'required|exists:tbl_lecturers,lecturer_id',
+            'lecturer_roles.member' => 'required|exists:tbl_lecturers,lecturer_id|different:lecturer_roles.chairman',
+            'lecturer_roles.secretary' => 'required|exists:tbl_lecturers,lecturer_id|different:lecturer_roles.chairman|different:lecturer_roles.member',
             'topic_ids' => 'required|array',
             'topic_ids.*' => 'exists:tbl_research_topics,topic_id',
         ]);
@@ -48,10 +57,10 @@ class EvaluationCouncilController extends Controller
         // Tạo hội đồng mới
         $council = EvaluationCouncil::create($request->only('council_name', 'council_level', 'time', 'location'));
 
-        // Gán giảng viên và chức vụ cho hội đồng
-        foreach ($request->lecturer_ids as $lecturer) {
-            $council->lecturers()->attach($lecturer['id'], ['duty' => $lecturer['duty']]);
-        }
+        // Gán giảng viên với vai trò cho hội đồng
+        $council->lecturers()->attach($request->lecturer_roles['chairman'], ['duty' => 'Chủ tịch hội đồng']);
+        $council->lecturers()->attach($request->lecturer_roles['member'], ['duty' => 'Ủy viên']);
+        $council->lecturers()->attach($request->lecturer_roles['secretary'], ['duty' => 'Thư ký']);
 
         // Gán đề tài cho hội đồng
         foreach ($request->topic_ids as $topic_id) {
@@ -67,15 +76,14 @@ class EvaluationCouncilController extends Controller
         $council = EvaluationCouncil::with('lecturers')->findOrFail($id);
         $lecturers = Lecturer::all();
         $topics = ResearchTopic::all();
-        $lecturerDuties = $council->lecturers->map(function ($lecturer) {
-            return [
-                'id' => $lecturer->lecturer_id,
-                'name' => $lecturer->lecturer_name,
-                'duty' => $lecturer->pivot->duty,
-            ];
-        });
 
-        return view('evaluation_councils.edit', compact('council', 'lecturers', 'topics', 'lecturerDuties'));
+        $roles = [
+            'chairman' => $council->lecturers->where('pivot.duty', 'Chủ tịch hội đồng')->first(),
+            'member' => $council->lecturers->where('pivot.duty', 'Ủy viên')->first(),
+            'secretary' => $council->lecturers->where('pivot.duty', 'Thư ký')->first(),
+        ];
+
+        return view('evaluation_councils.edit', compact('council', 'lecturers', 'topics', 'roles'));
     }
 
     // Cập nhật hội đồng
@@ -86,8 +94,9 @@ class EvaluationCouncilController extends Controller
             'council_level' => 'required|string|max:255',
             'time' => 'required|date',
             'location' => 'required|string|max:255',
-            'lecturer_ids' => 'required|array',
-            'lecturer_ids.*' => 'exists:tbl_lecturers,lecturer_id',
+            'lecturer_roles.chairman' => 'required|exists:tbl_lecturers,lecturer_id',
+            'lecturer_roles.member' => 'required|exists:tbl_lecturers,lecturer_id|different:lecturer_roles.chairman',
+            'lecturer_roles.secretary' => 'required|exists:tbl_lecturers,lecturer_id|different:lecturer_roles.chairman|different:lecturer_roles.member',
             'topic_ids' => 'required|array',
             'topic_ids.*' => 'exists:tbl_research_topics,topic_id',
         ]);
@@ -96,14 +105,18 @@ class EvaluationCouncilController extends Controller
         $council = EvaluationCouncil::findOrFail($id);
         $council->update($request->only('council_name', 'council_level', 'time', 'location'));
 
-        // Gán lại giảng viên cho hội đồng
-        $council->lecturers()->sync($request->lecturer_ids);
+        // Xóa giảng viên cũ và gán lại
+        $council->lecturers()->detach();
+        $council->lecturers()->attach($request->lecturer_roles['chairman'], ['duty' => 'Chủ tịch hội đồng']);
+        $council->lecturers()->attach($request->lecturer_roles['member'], ['duty' => 'Ủy viên']);
+        $council->lecturers()->attach($request->lecturer_roles['secretary'], ['duty' => 'Thư ký']);
 
         // Gán lại đề tài cho hội đồng
         $council->topics()->sync($request->topic_ids);
 
         return redirect()->route('evaluation_councils.index')->with('success', 'Hội đồng đã được cập nhật thành công!');
     }
+
 
     // Xóa hội đồng
     public function destroy($id)

@@ -44,14 +44,21 @@
             </div>
             <div class="mb-3">
                 <label for="report_url" class="form-label">Link báo cáo</label>
-                <input type="url" class="form-control" id="report_url" name="report_url" value="{{ $progress->report_url }}" placeholder="Nhập đường link báo cáo">
+                <input type="url" class="form-control" id="report_url" name="report_url"
+                    value="{{ $progress->report_url }}" placeholder="Nhập đường link báo cáo">
             </div>
 
             <div class="mb-3">
                 <label for="report_link_name" class="form-label">Tên đường link</label>
-                <input type="text" class="form-control" id="report_link_name" name="report_link_name" value="{{ $progress->report_link_name }}" placeholder="Nhập tên hiển thị của link">
+                <input type="text" class="form-control" id="report_link_name" name="report_link_name"
+                    value="{{ $progress->report_link_name }}" placeholder="Nhập tên hiển thị của link">
             </div>
-            
+            @if (auth()->check() && auth()->user()->role_id !== 2)
+                <div class="mb-3">
+                    <label for="note" class="form-label">Nhận xét</label>
+                    <textarea class="form-control" id="note" name="note" rows="4">{{ $progress->note }}</textarea>
+                </div>
+            @endif
 
             <button type="submit" class="btn btn-primary">Cập nhật Tiến độ</button>
         </form>

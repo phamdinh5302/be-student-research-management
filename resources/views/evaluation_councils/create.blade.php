@@ -14,8 +14,13 @@
 
             <div class="mb-3">
                 <label for="council_level" class="form-label">Cấp độ hội đồng</label>
-                <input type="text" name="council_level" id="council_level" class="form-control" required>
+                <select name="council_level" id="council_level" class="form-select" required>
+                    <option value="">-- Chọn cấp độ --</option>
+                    <option value="Cấp trường">Cấp trường</option>
+                    <option value="Cấp khoa">Cấp khoa</option>
+                </select>
             </div>
+            
 
             <div class="mb-3">
                 <label for="time" class="form-label">Thời gian</label>
@@ -28,33 +33,33 @@
             </div>
 
             <div class="mb-3">
-                <label for="lecturer_ids" class="form-label">Giảng viên tham gia</label>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Giảng viên</th>
-                            <th>Chức vụ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lecturerTable">
-                        @foreach ($lecturers as $lecturer)
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="lecturer_ids[{{ $lecturer->lecturer_id }}][id]"
-                                        value="{{ $lecturer->lecturer_id }}">
-                                    {{ $lecturer->lecturer_name }}
-                                </td>
-                                <td>
-                                    <select name="lecturer_ids[{{ $lecturer->lecturer_id }}][duty]" class="form-select">
-                                        <option value="Chủ tịch hội đồng">Chủ tịch hội đồng</option>
-                                        <option value="Ủy viên">Ủy viên</option>
-                                        <option value="Thư ký">Thư ký</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <label class="form-label">Chọn Chủ tịch hội đồng</label>
+                <select name="lecturer_roles[chairman]" class="form-select" required>
+                    <option value="">-- Chọn giảng viên --</option>
+                    @foreach ($lecturers as $lecturer)
+                        <option value="{{ $lecturer->lecturer_id }}">{{ $lecturer->lecturer_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Chọn Ủy viên</label>
+                <select name="lecturer_roles[member]" class="form-select" required>
+                    <option value="">-- Chọn giảng viên --</option>
+                    @foreach ($lecturers as $lecturer)
+                        <option value="{{ $lecturer->lecturer_id }}">{{ $lecturer->lecturer_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Chọn Thư ký</label>
+                <select name="lecturer_roles[secretary]" class="form-select" required>
+                    <option value="">-- Chọn giảng viên --</option>
+                    @foreach ($lecturers as $lecturer)
+                        <option value="{{ $lecturer->lecturer_id }}">{{ $lecturer->lecturer_name }}</option>
+                    @endforeach
+                </select>
             </div>
 
 

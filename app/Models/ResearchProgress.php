@@ -19,6 +19,7 @@ class ResearchProgress extends Model
         'report_content',
         'report_url',
         'report_link_name',
+        'note',
         'status'
     ];
 

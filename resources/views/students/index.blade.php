@@ -2,7 +2,11 @@
 
 @section('content')
     <h1 class="mb-4">Danh sách sinh viên</h1>
-    <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Thêm mới sinh viên</a>
+    <div class="mb-3 text-end">
+        <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus"></i> Thêm mới sinh viên
+        </a>
+    </div>
     <table class="table table-striped table-bordered">
         <thead class="table-dark">
             <tr>

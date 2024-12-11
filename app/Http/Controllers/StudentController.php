@@ -25,7 +25,7 @@ class StudentController extends Controller
     // Hiển thị form thêm mới sinh viên
     public function create()
     {
-        $accounts = Account::all();
+        $accounts = Account::where('role_id',2)->get();
         return view('students.create', compact('accounts'));
     }
 
@@ -68,7 +68,7 @@ class StudentController extends Controller
     public function edit($id)
     {
         $student = Student::findOrFail($id);
-        $accounts = Account::all();
+        $accounts = Account::where('role_id',2)->get();
         return view('students.edit', compact('student', 'accounts'));
     }
 
